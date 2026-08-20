@@ -19,25 +19,18 @@ document.querySelectorAll('.card,.story-copy,.service-grid>div').forEach(el => {
   observer.observe(el);
 });
 
-async function loadChunkedWebp(selector, chunkUrls) {
+async function loadBase64Webp(selector, url) {
   const targets = [...document.querySelectorAll(selector)];
   if (!targets.length) return;
   try {
-    const parts = await Promise.all(chunkUrls.map(async url => {
-      const response = await fetch(url, { cache: 'force-cache' });
-      if (!response.ok) throw new Error(`Failed to load ${url}`);
-      return (await response.text()).trim();
-    }));
-    const src = 'data:image/webp;base64,' + parts.join('');
+    const response = await fetch(url, { cache: 'force-cache' });
+    if (!response.ok) throw new Error(`Failed to load ${url}`);
+    const base64 = (await response.text()).trim();
+    const src = 'data:image/webp;base64,' + base64;
     targets.forEach(img => img.src = src);
   } catch (error) {
     console.warn('HD product image fallback used', error);
   }
 }
 
-loadChunkedWebp('[data-hd-multi]', [
-  'assets/hd-multi-0.txt',
-  'assets/hd-multi-1.txt',
-  'assets/hd-multi-2.txt',
-  'assets/hd-multi-3.txt'
-]);
+loadBase64Webp('[data-hd-curler]', 'assets/curler-hd.webp.b64');
