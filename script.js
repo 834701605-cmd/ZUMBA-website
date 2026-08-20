@@ -34,3 +34,4 @@ async function loadBase64Webp(selector, url) {
 }
 
 loadBase64Webp('[data-hd-curler]', 'assets/curler-hd.webp.b64');
+loadBase64Webp('[data-hd-dryer]', 'assets/dryer-hd.webp.b64');
